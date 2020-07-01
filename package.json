@@ -1,0 +1,27 @@
+{
+  "name": "postman-collections",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ziadjendi/postman-collections.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ziadjendi/postman-collections/issues"
+  },
+  "homepage": "https://github.com/ziadjendi/postman-collections#readme",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "config": "^3.3.1",
+    "lodash": "^4.17.15",
+    "newman": "^5.1.0",
+    "newman-reporter-html": "^1.0.5"
+  }
+}
