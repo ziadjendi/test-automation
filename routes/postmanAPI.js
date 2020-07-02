@@ -17,6 +17,14 @@ const getCollections = async () => {
     console.log(error);
   }
 };
+const getCollection = async (id) => {
+  try {
+    const { data } = await http.get(collectionsUrl + "/" + id, { headers });
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 const getEnvironments = async () => {
   try {
     const { data } = await http.get(environmentsUrl, { headers });
@@ -29,4 +37,5 @@ const getEnvironments = async () => {
 module.exports = {
   getCollections,
   getEnvironments,
+  getCollection,
 };
