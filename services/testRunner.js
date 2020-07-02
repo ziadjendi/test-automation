@@ -10,10 +10,16 @@ const callback = (error, summary) => {
   }
 };
 
-const test = (collection, env) => {
+const test = (coll, env, folder = null) => {
+  let environment = env.includes(baseUrl)
+    ? env
+    : `${baseUrl}/environments/${env}?apikey=${apiKey}`;
+  const collection = `${baseUrl}/collections/${coll}?apikey=${apiKey}`;
+
   const options = {
-    collection: `${baseUrl}/collections/${collection}?apikey=${apiKey}`,
-    environment: `${baseUrl}/environments/${env}?apikey=${apiKey}`,
+    collection,
+    environment,
+    folder,
     reporters: ["cli", "html"],
     reporter: {
       html: { export: "./reports/htmlResults.html" },
@@ -25,13 +31,18 @@ const test = (collection, env) => {
     .on("start", (err, args) => {
       console.log("running a collection...");
     })
+    .on("beforeDone", (err, summary) => {
+      environment = summary.environment;
+    })
     .on("done", (err, summary) => {
       if (err || summary.error) {
         console.log("collection run encountered an error.");
       } else {
         console.log("collection run completed.");
+        // return environment;
       }
     });
+  return environment;
 };
 
 module.exports = test;
