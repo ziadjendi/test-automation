@@ -13,8 +13,8 @@ require("./startup/config")();
 // );
 // test(
 //   "11843676-dadb3174-cfce-46fd-90cf-9c5c6ccaeed9",
-//   "11843676-fd187779-f1f9-4b33-a5de-55f5a886a684",
-//   "Dashboard"
+//   "11843676-adedbc40-581b-4814-acce-e9553f117f5f",
+//   "Login"
 // );
 
-admin.listEnvironments();
+admin.runTest("prod", "Dashboard");

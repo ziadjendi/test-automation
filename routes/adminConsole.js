@@ -1,6 +1,7 @@
 const pmapi = require("./postmanAPI");
 const _ = require("lodash");
 const test = require("../services/testRunner");
+const { getCollection } = require("./postmanAPI");
 
 const listCollections = async () => {
   const { collections } = await pmapi.getCollections();
@@ -9,10 +10,24 @@ const listCollections = async () => {
   return collections;
 };
 
+const getCollectionUID = async (collectionName) => {
+  const { collections } = await pmapi.getCollections();
+  const coll = collections.find((coll) => coll.name === collectionName);
+  //   console.log(coll.uid);
+  return coll.uid;
+};
+
 const listEnvironments = async () => {
   const envs = await pmapi.getEnvironments();
   //   console.log(envs);
   return envs;
+};
+
+const getEnvironmentUID = async (environmentName) => {
+  const { environments } = await pmapi.getEnvironments();
+  const env = environments.find((env) => env.name === environmentName);
+  //   console.log(env.uid);
+  return env.uid;
 };
 
 const WorkflowGroups = async (collectionID) => {
@@ -41,9 +56,35 @@ const listWorkflows = async (groupName) => {
   return result;
 };
 
+const runTest = async (environment = "prod", workflows) => {
+  const collectionName = "Abjadiyat";
+  const collectionUID = await getCollectionUID(collectionName);
+  const environmentUID = await getEnvironmentUID(environment);
+  if (!workflows) {
+    // run the full test in Abjadiyat collection
+    test(collectionUID, environmentUID);
+  } else {
+    const collection = await pmapi.getCollection(collectionUID);
+    for (const wfGroup of collection.item) {
+      for (const wf of wfGroup.item) {
+        if (!workflows.includes(wf.name)) {
+          const index = wfGroup.item.indexOf(wf);
+          delete wfGroup.item[index];
+        }
+      }
+      wfGroup.item = _.compact(wfGroup.item);
+    }
+    // console.log(collection);
+    await test(collection, environmentUID);
+  }
+};
+
 module.exports = {
   listCollections,
+  getCollectionUID,
   WorkflowGroups,
   listWorkflows,
   listEnvironments,
+  getEnvironmentUID,
+  runTest,
 };

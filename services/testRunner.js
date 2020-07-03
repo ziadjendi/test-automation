@@ -1,5 +1,6 @@
 const newman = require("newman");
 const config = require("config");
+const pmapi = require("../routes/postmanAPI");
 
 const apiKey = config.get("apikey");
 const baseUrl = "https://api.getpostman.com";
@@ -14,7 +15,10 @@ const test = (coll, env, folder = null) => {
   let environment = env.includes(baseUrl)
     ? env
     : `${baseUrl}/environments/${env}?apikey=${apiKey}`;
-  const collection = `${baseUrl}/collections/${coll}?apikey=${apiKey}`;
+  const collection =
+    typeof coll === "string"
+      ? `${baseUrl}/collections/${coll}?apikey=${apiKey}`
+      : coll;
 
   const options = {
     collection,
@@ -31,18 +35,17 @@ const test = (coll, env, folder = null) => {
     .on("start", (err, args) => {
       console.log("running a collection...");
     })
-    .on("beforeDone", (err, summary) => {
-      environment = summary.environment;
-    })
+    // .on("beforeDone", async (err, summary) => {
+    //   // const result = await pmapi.getEnvironment(env);
+    //   // console.log(result.environment.values);
+    // })
     .on("done", (err, summary) => {
       if (err || summary.error) {
         console.log("collection run encountered an error.");
       } else {
         console.log("collection run completed.");
-        // return environment;
       }
     });
-  return environment;
 };
 
 module.exports = test;
