@@ -16,5 +16,9 @@ require("./startup/config")();
 //   "11843676-adedbc40-581b-4814-acce-e9553f117f5f",
 //   "Login"
 // );
-
-admin.runTest("prod", "Dashboard");
+const options = {
+  workflows: ["Dashboard", "Login"],
+  environment: "dev",
+  workflowGroups: ["Teachers App", "Leader App"],
+};
+admin.runTest(options);

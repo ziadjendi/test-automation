@@ -56,7 +56,13 @@ const listWorkflows = async (groupName) => {
   return result;
 };
 
-const runTest = async (environment = "prod", workflows) => {
+const runTest = async (
+  { workflows, environment, workflowGroups } = {
+    workflows: [],
+    environment: "prod",
+    workflowGroups: [],
+  }
+) => {
   const collectionName = "Abjadiyat";
   const collectionUID = await getCollectionUID(collectionName);
   const environmentUID = await getEnvironmentUID(environment);
@@ -66,13 +72,21 @@ const runTest = async (environment = "prod", workflows) => {
   } else {
     const collection = await pmapi.getCollection(collectionUID);
     for (const wfGroup of collection.item) {
-      for (const wf of wfGroup.item) {
-        if (!workflows.includes(wf.name)) {
-          const index = wfGroup.item.indexOf(wf);
-          delete wfGroup.item[index];
+      if (
+        (workflowGroups && workflowGroups.includes(wfGroup.name)) ||
+        !workflowGroups
+      ) {
+        for (const wf of wfGroup.item) {
+          if (!workflows.includes(wf.name)) {
+            const index = wfGroup.item.indexOf(wf);
+            delete wfGroup.item[index];
+          }
         }
+        wfGroup.item = _.compact(wfGroup.item);
+      } else {
+        const index = collection.item.indexOf(wfGroup);
+        delete collection.item[index];
       }
-      wfGroup.item = _.compact(wfGroup.item);
     }
     // console.log(collection);
     await test(collection, environmentUID);

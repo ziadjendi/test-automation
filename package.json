@@ -1,5 +1,5 @@
 {
-  "name": "postman-collections",
+  "name": "test-automation",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,18 +8,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ziadjendi/postman-collections.git"
+    "url": "https://github.com/ziadjendi/test-automation"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ziadjendi/postman-collections/issues"
+    "url": "https://github.com/ziadjendi/test-automation/issues"
   },
-  "homepage": "https://github.com/ziadjendi/postman-collections#readme",
+  "homepage": "https://github.com/ziadjendi/test-automation#readme",
   "dependencies": {
     "axios": "^0.19.2",
     "config": "^3.3.1",
+    "express": "^4.17.1",
     "lodash": "^4.17.15",
     "newman": "^5.1.0",
     "newman-reporter-html": "^1.0.5"
