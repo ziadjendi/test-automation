@@ -56,17 +56,19 @@ const listWorkflows = async (groupName) => {
   return result;
 };
 
-const runTest = async (
-  { workflows, environment, workflowGroups } = {
-    workflows: [],
-    environment: "prod",
-    workflowGroups: [],
-  }
-) => {
+const runTest = async ({
+  workflows = [],
+  environment = "prod",
+  workflowGroups = [],
+}) => {
+  console.log("workflows", workflows);
+  console.log("environment", environment);
+  console.log("workflowGroups", workflowGroups);
   const collectionName = "Abjadiyat";
   const collectionUID = await getCollectionUID(collectionName);
   const environmentUID = await getEnvironmentUID(environment);
-  if (!workflows) {
+  if (!workflows.length && !workflowGroups.length) {
+    console.log("Run all tests");
     // run the full test in Abjadiyat collection
     test(collectionUID, environmentUID);
   } else {
@@ -74,10 +76,10 @@ const runTest = async (
     for (const wfGroup of collection.item) {
       if (
         (workflowGroups && workflowGroups.includes(wfGroup.name)) ||
-        !workflowGroups
+        !workflowGroups.length
       ) {
         for (const wf of wfGroup.item) {
-          if (!workflows.includes(wf.name)) {
+          if (!workflows.includes(wf.name) && workflows.length) {
             const index = wfGroup.item.indexOf(wf);
             delete wfGroup.item[index];
           }
