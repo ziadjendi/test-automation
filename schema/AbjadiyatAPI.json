@@ -27,7 +27,8 @@
             "name": "ams-teacher-class-mapping-controller",
             "description": "Ams Teacher Class Mapping Controller"
         },
-        {
+        { 
+            
             "name": "ams-teacher-controller",
             "description": "Ams Teacher Controller"
         },
