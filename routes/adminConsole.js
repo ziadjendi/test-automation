@@ -1,7 +1,6 @@
 const pmapi = require("./postmanAPI");
 const _ = require("lodash");
 const test = require("../services/testRunner");
-const { getCollection } = require("./postmanAPI");
 
 const listCollections = async () => {
   const { collections } = await pmapi.getCollections();
@@ -28,6 +27,40 @@ const getEnvironmentUID = async (environmentName) => {
   const env = environments.find((env) => env.name === environmentName);
   //   console.log(env.uid);
   return env.uid;
+};
+
+const getEnvironment = async (environmentName) => {
+  const environmentUID = await getEnvironmentUID(environmentName);
+  const payload = await pmapi.getEnvironment(environmentUID);
+  return payload;
+};
+
+const setEnvironmentVars = async (environmentName, variables) => {
+  const { environment } = await getEnvironment(environmentName);
+  for (const varName of Object.keys(variables)) {
+    const existVar = environment.values.find(
+      (varObj) => varObj.key === varName
+    );
+    const varValue =
+      typeof variables[varName] === "string"
+        ? variables[varName]
+        : JSON.stringify(variables[varName]);
+    if (existVar) {
+      const index = environment.values.indexOf(existVar);
+      console.log(existVar.key);
+      existVar.value = varValue;
+      environment.values[index] = existVar;
+    } else {
+      const newVar = {
+        key: varName,
+        value: varValue,
+      };
+      environment.values.push(newVar);
+    }
+  }
+  const envUID = await getEnvironmentUID(environmentName);
+  const data = await pmapi.updateEnvironment(envUID, { environment });
+  console.log(data);
 };
 
 const WorkflowGroups = async (collectionID) => {
@@ -60,6 +93,7 @@ const runTest = async ({
   workflows = [],
   environment = "prod",
   workflowGroups = [],
+  variables: {},
 }) => {
   console.log("workflows", workflows);
   console.log("environment", environment);
@@ -102,5 +136,6 @@ module.exports = {
   listWorkflows,
   listEnvironments,
   getEnvironmentUID,
+  setEnvironmentVars,
   runTest,
 };
