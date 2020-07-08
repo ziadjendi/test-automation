@@ -1,6 +1,7 @@
 const { getCollections, getEnvironments } = require("./routes/postmanAPI");
 const test = require("./services/testRunner.js");
 const admin = require("./routes/adminConsole");
+const postmanAPI = require("./routes/postmanAPI");
 require("./startup/config")();
 
 // getEnvironments().then(console.log).catch(console.error);
@@ -17,8 +18,38 @@ require("./startup/config")();
 //   "Login"
 // );
 const options = {
-  workflows: ["Dashboard", "Login"],
-  environment: "dev",
-  workflowGroups: ["Teachers App", "Leader App"],
+  workflows: "Login",
+  environment: "prod",
+  workflowGroups: "Teachers App",
+  variables: {},
 };
 admin.runTest(options);
+// admin.setEnvironmentVars("dev", {
+//   bar: 15,
+//   HOSTNAME: "https://abjadiyat-web-api-dev.abjadiyat.com",
+//   // HOSTNAME: "https://dev.abjadiyat.com",
+//   // vars: { key1: "val1", key2: "val2" },
+// });
+
+// const payload = {
+//   environment: {
+//     id: "81a02c5e-b640-4a32-b68a-585891214502",
+//     name: "dev",
+//     values: [
+//       {
+//         key: "HOSTNAME",
+//         value: "https://abjadiyat-web-api-dev.abjadiyat.com",
+//       },
+//       {
+//         key: "payloads",
+//         value:
+//           '[{ "_contactType": "mobile", "_emailOrMobile": "971562094980" }, { "_contactType": "email", "_emailOrMobile": "anju@ibdaa.com" }]',
+//       },
+//       {
+//         key: "pinCode",
+//         value: "2148",
+//       },
+//     ],
+//   },
+// };
+// postmanAPI.getEnvironment("81a02c5e-b640-4a32-b68a-585891214502");
