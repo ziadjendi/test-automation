@@ -1,4 +1,3 @@
-const { getCollections, getEnvironments } = require("./routes/postmanAPI");
 const test = require("./services/testRunner.js");
 const admin = require("./routes/adminConsole");
 const postmanAPI = require("./routes/postmanAPI");
@@ -18,6 +17,7 @@ require("./startup/config")();
 //   "Login"
 // );
 const options = {
+  collectionName: "Abjadiyat",
   workflows: "Login",
   environment: "prod",
   workflowGroups: "Teachers App",
